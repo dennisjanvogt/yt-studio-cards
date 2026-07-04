@@ -58,10 +58,34 @@ lokal gecacht (`chrome.storage`), sodass sie beim nächsten Mal sofort da sind.
 - **‹ Neueres / Älteres ›**: direkt zum nächsten Video-Analytics springen –
   jeder Besuch füttert nebenbei den Metrik-Cache
 
-**Einstellungen (Klick aufs Extension-Icon):**
-- Ampel-Schwellwerte für CTR und Retention
-- Kartengröße (Klein/Mittel/Groß)
-- Analytics-Panel ein-/ausschalten, Cache leeren
+**Watch-Pages auf youtube.com (Recherche, vidIQ-Style):**
+Kategorisiertes Panel oben in der Sidebar jedes Videos (auch fremder Kanäle) –
+zeigt bewusst nur, was auf der Seite NICHT sichtbar ist:
+- **Momentum**: Hero mit **aktueller Geschwindigkeit** (echte Δ Views/Δ Zeit aus
+  selbst gesammelten Snapshots!) inkl. Trend-Pfeil vs. Lifetime-Ø und Sparkline
+- **Engagement**: Like-/Kommentar-Quote (Ampel-Benchmarks), Likes exakt
+- **Reichweite**: Views/Abo (>100 % = trägt über die eigene Bubble), Länder-
+  Verfügbarkeit, Kategorie
+- **Metadaten**: exakter Upload-Zeitpunkt (Wochentag + Uhrzeit), Titel-/
+  Beschreibungslänge, Links & Hashtags
+- **Tags** einsehen + kopieren, **Thumbnail** HD/SD
+- **Datensammlung**: pro Besuch wird ein Snapshot (Views/Likes/Kommentare)
+  gespeichert (max. 40/Video, 300 Videos) – je öfter du ein Video besuchst,
+  desto präziser das Momentum. Abschaltbar in den Einstellungen.
+
+**Extension-Icon (überall in Chrome):**
+- **Badge** zeigt die heutige Kanal-Watchtime direkt am Icon (z. B. „2,4h")
+- **Popup = Mini-Dashboard**: WT heute (Kanal), Ø CTR/Retention (ampelgefärbt),
+  Top-Video heute mit Direktlink in dessen Analytics – ohne Studio öffnen zu müssen
+- Einstellungen darunter: Ampel-Schwellwerte, Kartengröße, Analytics-Panel,
+  Eckig-Modus (alle Rundungen auf YouTube + Studio entfernen), Cache leeren
+
+**Karten & Watchtime:**
+- Karten zeigen zusätzlich **WT heute (seit 0 Uhr)** und **WT gesamt** pro Video
+  (heutiges Zeitfenster via `screenConfig.timePeriod.dateIdRange`, live verifiziert)
+- Sortierung auch nach WT heute / WT gesamt
+- Dashboard-Insights mit WT-heute-Banner (Kanal-Summe) und geglätteten
+  CTR-/Retention-Trend-Graphen, je mit Zeitraum-Filter (Immer/Jahr/Monat/Woche)
 
 ## Architektur
 

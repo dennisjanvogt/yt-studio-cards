@@ -60,7 +60,7 @@
   const VIEW_KEY = "ytsc_cards_on";
   const ORDER_KEY = "ytsc_video_order"; // id -> { title, dateMs } (für Analytics-Navigation)
   const SETTINGS_KEY = "ytsc_settings";
-  const DEFAULTS = { ctrGood: 5, ctrOk: 3, retGood: 50, retOk: 35, cardMin: 300, showPanel: true, squareMode: true };
+  const DEFAULTS = { ctrGood: 5, ctrOk: 3, retGood: 50, retOk: 35, cardMin: 300, showPanel: true, watchPanel: true, squareMode: true };
   let metricsCache = {};
   let videoOrder = {};
   const SETTINGS = Object.assign({}, DEFAULTS);
