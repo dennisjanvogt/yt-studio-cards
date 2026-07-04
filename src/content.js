@@ -196,6 +196,23 @@
     d = d || new Date();
     return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
   }
+  // "02.07.2026" -> "02.07.26" (Jahrhundert weg)
+  function fmtDateShort(s) {
+    if (!s) return "—";
+    return s.replace(/(\d{1,2}\.\d{1,2}\.)(\d{2})(\d{2})/, "$1$3");
+  }
+  // Tage seit Veröffentlichung
+  function daysOnline(dateMs) {
+    if (!dateMs) return null;
+    return Math.max(0, Math.floor((Date.now() - dateMs) / 86400000));
+  }
+  function fmtDaysOnline(dateMs) {
+    const d = daysOnline(dateMs);
+    if (d == null) return "—";
+    if (d === 0) return "heute";
+    if (d === 1) return "1 Tag";
+    return d + " Tage";
+  }
 
   // ---------------------------------------------------------------- Scraping
   function listContainer() {
@@ -477,6 +494,7 @@
         }, 300);
       });
       ensureToolbar._obs.observe(list, { childList: true, subtree: true });
+      ensureToolbar._watched = list;
     }
   }
 
@@ -620,13 +638,15 @@
       if (showLikes) chips.append(chipEl("Likes", fmtCount(r.likes)));
       body.append(chips);
 
-      // Dreier-Zeile: Wiedergabezeit heute (seit 0 Uhr) | gesamt | Datum
-      const chips3 = el("div", "ytsc-chips ytsc-chips-3");
+      // Vierer-Zeile: WT heute | WT gesamt | Online (Tage) | Datum (kurz)
+      const chips3 = el("div", "ytsc-chips ytsc-chips-3 ytsc-chips-4");
       const wtToday = chipEl("WT heute", fmtWatch(r.watchTimeToday));
       wtToday.title = "Wiedergabezeit heute (seit 0 Uhr)";
       const wtTotal = chipEl("WT gesamt", fmtWatch(r.watchTime));
       wtTotal.title = "Wiedergabezeit gesamt";
-      chips3.append(wtToday, wtTotal, chipEl("Datum", r.date || "—"));
+      const online = chipEl("Online", fmtDaysOnline(r.dateMs));
+      online.title = "Tage seit Veröffentlichung";
+      chips3.append(wtToday, wtTotal, online, chipEl("Datum", fmtDateShort(r.date)));
       body.append(chips3);
 
       card.append(body);
@@ -1205,6 +1225,35 @@
     updateHint();
   }
 
+  // ------------------------------------------- Immer 50 Zeilen pro Seite
+  // Studios Default ist 30. Das zugehörige ytcp-text-menu existiert im DOM
+  // auch bei geschlossenem Dropdown – Klick aufs "50"-Item wählt direkt
+  // (live verifiziert). Cooldown verhindert Klick-Schleifen.
+  let pageSizeLastTry = 0;
+  function ensurePageSize50() {
+    if (Date.now() - pageSizeLastTry < 8000) return;
+    const sel = document.querySelector("#footer-container ytcp-select");
+    if (!sel) return;
+    const cur = (sel.querySelector(".dropdown-trigger-text") || {}).textContent?.trim();
+    if (!/^\d+$/.test(cur || "") || cur === "50") return;
+    // Es gibt mehrere ytcp-text-menu-Kandidaten im DOM (teils Templates).
+    // In ALLEN passenden (nur 10/30/50-Menüs) das 50er-Item klicken –
+    // die falschen sind No-ops, das richtige schaltet um.
+    const menus = [...document.querySelectorAll("ytcp-text-menu")].filter((m) => {
+      const t = [...m.querySelectorAll("tp-yt-paper-item")].map((i) => i.textContent.trim());
+      return t.length > 0 && t.length <= 5 && t.includes("50") && t.includes("30");
+    });
+    let clicked = false;
+    for (const m of menus) {
+      const item = [...m.querySelectorAll("tp-yt-paper-item")].find((i) => i.textContent.trim() === "50");
+      if (item) {
+        item.click();
+        clicked = true;
+      }
+    }
+    if (clicked) pageSizeLastTry = Date.now();
+  }
+
   // ---------------------------------------------------------------- Routing
   function isVideosPage() {
     return /\/videos(\/|$|\?)/.test(location.pathname + location.search);
@@ -1260,6 +1309,7 @@
       if (document.getElementById("ytsc-toolbar")) cleanup();
       return;
     }
+    ensurePageSize50();
     if (document.querySelector("ytcp-video-row") && !document.getElementById("ytsc-toolbar")) {
       ensureToolbar();
       scrapeRows(); // Videoverzeichnis (Titel/Dauer/Sichtbarkeit) auch ohne Karten-Modus auffrischen
@@ -1268,6 +1318,25 @@
           if (r[VIEW_KEY]) setCards(true);
         });
       } catch (_) {}
+    }
+
+    // Selbstheilung: Studio ersetzt beim Navigieren/Sortieren manchmal den
+    // kompletten Tabellen-Container -> Klasse und Observer neu anbringen,
+    // sonst sind Karten UND native Liste gleichzeitig sichtbar.
+    const list = listContainer();
+    if (cardsOn && list) {
+      if (!list.classList.contains("ytsc-rows-hidden")) {
+        list.classList.add("ytsc-rows-hidden");
+        currentRows = scrapeRows();
+        renderGrid();
+      }
+      if (ensureToolbar._obs && ensureToolbar._watched !== list) {
+        try {
+          ensureToolbar._obs.disconnect();
+        } catch (_) {}
+        ensureToolbar._obs.observe(list, { childList: true, subtree: true });
+        ensureToolbar._watched = list;
+      }
     }
   }
 

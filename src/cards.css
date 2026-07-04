@@ -8,6 +8,17 @@
   display: none !important;
 }
 
+/* Pager in der Karten-Ansicht NACH OBEN (direkt unter die Toolbar):
+   Container wird Flex-Spalte, Footer bekommt order -1 -> vor dem Grid. */
+.video-table-content.ytsc-rows-hidden {
+  display: flex !important;
+  flex-direction: column;
+}
+.video-table-content.ytsc-rows-hidden > #footer-container {
+  order: -1;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
 #ytsc-toolbar {
   display: flex;
   align-items: center;
@@ -235,9 +246,10 @@
 /* Datum über die volle Breite (sonst zu eng) -> immer gleicher Platz unten */
 .ytsc-chips .ytsc-chip.wide { grid-column: 1 / -1; }
 
-/* Dreier-Zeile (WT heute | WT gesamt | Datum): Label über Wert gestapelt,
-   damit drei Chips nebeneinander in die Kartenbreite passen */
+/* Dreier-/Vierer-Zeile: Label über Wert gestapelt, damit mehrere Chips
+   nebeneinander in die Kartenbreite passen */
 .ytsc-chips-3 { grid-template-columns: 1fr 1fr 1fr; }
+.ytsc-chips-4 { grid-template-columns: repeat(4, 1fr); }
 .ytsc-chips-3 .ytsc-chip {
   flex-direction: column;
   align-items: flex-start;
