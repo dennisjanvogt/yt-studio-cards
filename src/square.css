@@ -1,0 +1,8 @@
+/* Eckig-Modus: ALLE Rundungen entfernen (YouTube + Studio).
+   Aktivierung über die Klasse ytsc-square auf <html> (siehe square.js),
+   abschaltbar im Einstellungs-Popup der Extension. */
+html.ytsc-square *,
+html.ytsc-square *::before,
+html.ytsc-square *::after {
+  border-radius: 0 !important;
+}

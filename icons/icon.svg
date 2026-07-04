@@ -1,0 +1,30 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5045"/>
+      <stop offset="1" stop-color="#d31e19"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.20"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Kachel -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)"/>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#shine)"/>
+  <rect x="5.5" y="5.5" width="117" height="117" rx="26.5" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="3"/>
+
+  <!-- Balken (Karten/Analytics), dezent -->
+  <g fill="#ffffff" fill-opacity="0.30">
+    <rect x="28" y="74" width="15" height="26" rx="5"/>
+    <rect x="56" y="60" width="15" height="40" rx="5"/>
+    <rect x="84" y="46" width="15" height="54" rx="5"/>
+  </g>
+
+  <!-- geglättete Trend-Linie -->
+  <path d="M24 88 C 42 86, 48 66, 63 61 C 78 56, 82 42, 99 34"
+        fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="99" cy="34" r="8.5" fill="#ffffff"/>
+</svg>

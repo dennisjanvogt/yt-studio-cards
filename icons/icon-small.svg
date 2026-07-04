@@ -1,0 +1,13 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- 16px-optimiert: nur Kachel + kräftige Trend-Linie, keine Details -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5045"/>
+      <stop offset="1" stop-color="#d31e19"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="124" height="124" rx="30" fill="url(#bg)"/>
+  <path d="M22 90 C 44 88, 50 64, 66 58 C 82 52, 88 40, 104 32"
+        fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="104" cy="32" r="13" fill="#ffffff"/>
+</svg>

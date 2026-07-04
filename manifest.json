@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "YT Studio Karten – CTR & Retention",
+  "version": "2.1.0",
+  "description": "Karten-Ansicht, CTR & Retention, Video-Vergleich, CSV-Export, Analytics-Navigation und Eckig-Modus für YouTube Studio.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://studio.youtube.com/*", "https://www.youtube.com/*"],
+  "action": {
+    "default_title": "YT Studio Karten – Einstellungen",
+    "default_popup": "src/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://studio.youtube.com/*", "https://www.youtube.com/*"],
+      "js": ["src/square.js"],
+      "css": ["src/square.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://studio.youtube.com/*"],
+      "js": ["src/inject.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://studio.youtube.com/*"],
+      "js": ["src/content.js"],
+      "css": ["src/cards.css"],
+      "world": "ISOLATED",
+      "run_at": "document_idle"
+    }
+  ]
+}
